@@ -205,8 +205,8 @@ html.dark .toggle-track {
     border-color: #3a4456;
 }
 .theme-switch input:checked + .toggle-track {
-    background: var(--brand);
-    border-color: var(--brand-dark);
+    background: var(--surface-2);
+    border-color: var(--border-strong);
 }
 .theme-switch input:checked + .toggle-track span:first-child {
     opacity: 0.55;

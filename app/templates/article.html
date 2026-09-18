@@ -24,7 +24,7 @@
     <div class="btn-actions">
         <!-- Кнопка КОПИРОВАТЬ -->
         <button id="copyBtn" class="btn btn-copy">
-            Копировать инструкцию в заметки
+            Скопировать инструкцию
         </button>
 
         <!-- Кнопка НАЧАТЬ ЗАНОВО -->
@@ -33,29 +33,51 @@
 </div>
 
 <script>
+function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+    }
+    // Фоллбэк для небезопасных контекстов (http://ip:порт), где Clipboard API недоступен
+    return new Promise(function (resolve, reject) {
+        try {
+            var ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.top = '-1000px';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            var ok = document.execCommand('copy');
+            document.body.removeChild(ta);
+            ok ? resolve() : reject();
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
 document.getElementById('copyBtn').addEventListener('click', function() {
-    // 1. Берём текст заголовка напрямую из тега h1 (там он уже очищен от "— bleeding")
-    const headerElement = document.querySelector('h1');
-    const cleanTitle = headerElement ? headerElement.innerText.trim() : "";
+    // Заголовок текущей инструкции (карточка, а не шапка сайта)
+    var titleEl = document.querySelector('.intro-title');
+    var cleanTitle = titleEl ? titleEl.innerText.trim() : "";
 
-    // 2. Берём текст инструкции напрямую из блока markdown-body
-    const contentElement = document.querySelector('.markdown-body');
-    const instructionText = contentElement ? contentElement.innerText.trim() : "";
+    // Текст инструкции из блока markdown-body
+    var contentEl = document.querySelector('.markdown-body');
+    var instructionText = contentEl ? contentEl.innerText.trim() : "";
 
-    // 3. Формируем финальный текст: Заголовок, затем инструкция, затем ссылка.
-    // Мы убрали ручное добавление префикса "Стрижеспасатель — ", так как он уже есть в заголовке.
-    const textToCopy = `${cleanTitle}\n\n${instructionText}\n\n${window.location.href}`;
+    var textToCopy = cleanTitle + "\n\n" + instructionText + "\n\n" + window.location.href;
 
-    navigator.clipboard.writeText(textToCopy).then(() => {
-        const originalText = this.innerText;
-        this.innerText = "✅ Скопировано!";
-        this.style.opacity = "0.85";
-
-        setTimeout(() => {
-            this.innerText = originalText;
-            this.style.opacity = "";
+    var btn = this;
+    copyText(textToCopy).then(function () {
+        var originalText = btn.innerText;
+        btn.innerText = "✅ Скопировано!";
+        btn.style.opacity = "0.85";
+        setTimeout(function () {
+            btn.innerText = originalText;
+            btn.style.opacity = "";
         }, 2000);
-    }).catch(err => {
+    }).catch(function () {
         alert("Не удалось скопировать текст автоматически.");
     });
 });
