@@ -113,9 +113,9 @@ body {
     width: 100%;
     max-width: 620px;
     margin: 0 auto;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    justify-content: space-between;
     gap: 16px;
     padding: 14px 20px;
     margin-bottom: 28px;
@@ -130,7 +130,7 @@ body {
 /* Логотип-ссылка занимает только свой размер и прижат влево;
    надпись вынесена в отдельный .site-title и центрируется по середине шапки. */
 .link-brand {
-    flex: 0 0 auto;
+    justify-self: start;
     font-size: 22px;
     font-weight: 800;
     color: var(--text);
@@ -149,7 +149,6 @@ body {
 /* Заголовок сайта (h1) занимает среднюю часть шапки и центрируется
    между логотипом слева и переключателем темы справа. */
 .site-title {
-    flex: 1 1 auto;
     margin: 0;
     text-align: center;
     font-size: 27px;
@@ -175,6 +174,7 @@ body {
     width: 60px;
     height: 32px;
     flex-shrink: 0;
+    justify-self: end;
 }
 .theme-switch input {
     opacity: 0;
@@ -567,7 +567,7 @@ html.dark .quiz-validate-warning {
         flex-shrink: 0;
         max-width: 150px;
     }
-    .link-brand span {
+    .site-title {
         font-size: 17px;
         line-height: 26px;
         letter-spacing: 0;
@@ -576,7 +576,7 @@ html.dark .quiz-validate-warning {
 }
 @media (max-width: 360px) {
     .link-brand { font-size: 14px; }
-    .link-brand span { font-size: 13px; letter-spacing: 0; }
+    .site-title { font-size: 13px; letter-spacing: 0; }
 }
 
 /* Дозволение масштабирования (доступность) */
