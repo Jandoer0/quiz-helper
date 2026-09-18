@@ -146,12 +146,12 @@ body {
 .link-brand:hover {
     color: var(--brand);
 }
-/* Заголовок сайта центрирован по середине шапки между логотипом и переключателем. */
+/* Заголовок сайта (h1) занимает среднюю часть шапки и центрируется
+   между логотипом слева и переключателем темы справа. */
 .site-title {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    flex: 1 1 auto;
+    margin: 0;
+    text-align: center;
     font-size: 27px;
     font-weight: 700;
     line-height: 34px;
