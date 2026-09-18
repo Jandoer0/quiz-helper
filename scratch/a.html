@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Стрижеспасатель</title>
+    <!-- Используем прямой путь вместо url_for для исключения ошибок маршрутизации -->
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/img/swift.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/img/swift.png"><link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="dark">
+    <!-- Шапка с переключателем тем -->
+    <header class="site-header">
+        <a href="/" class="link-brand" aria-label="Стрижеспасатель">
+            <img src="/static/img/swift.png" alt="Стриж" class="swift-logo">
+            <span>Стрижеспасатель</span>
+        </a>
+        <label class="theme-switch" title="Сменить тему">
+          <input type="checkbox" id="themeToggle" aria-label="Тема">
+          <div class="toggle-track">
+            <span>☀️</span>
+            <span>🌙</span>
+          </div>
+        </label>
+    </header>
+
+    <div class="content-wrap">
+        <div class="container">
+            
+            
+<div class="card">
+    <!-- Заголовок карточки инструкции (внешний проект) -->
+    <h1 class="intro-title">Инструкция по уходу за птицей</h1>
+    <!-- Контент инструкции из Markdown -->
+    <div class="markdown-body">
+        <h1 id="_1">Помощь при кровотечении</h1>
+<p>Если у птицы есть видимое кровотечение, это критическое состояние.</p>
+<h2 id="_2">Что нужно сделать немедленно:</h2>
+<ol>
+<li><strong>Остановите кровь:</strong> Аккуратно прижмите место кровотечения чистой марлею или кусочком бинта. Не давите слишком сильно.</li>
+<li><strong>Минимизируйте стресс:</strong> Поместите птицу в темную, тихую и теплую коробку (картонную).</li>
+<li><strong>Не давайте воду:</strong> В таком состоянии птица может задохнуться от воды.</li>
+</ol>
+<h2 id="_3">Дальнейшие действия:</h2>
+<ul>
+<li>Птице требуется немедленная ветеринарная помощь. </li>
+<li>Сообщите волонтерам о серьезности травмы при обращении.</li>
+</ul>
+    </div>
+
+    
+    <div class="contacts-box">
+        <p>Связаться с волонтерами:</p>
+        
+        <div class="contact-row">
+            <a href="https://vk.com/strijhelp" target="_blank" rel="noopener">VK: https://vk.com/strijhelp</a>
+        </div>
+        
+        <div class="contact-row">
+            <a href="https://t.me/strijhelp" target="_blank" rel="noopener">Telegram: https://t.me/strijhelp</a>
+        </div>
+        
+        <div class="contact-row">
+            <a href="help@strijhelp.org" target="_blank" rel="noopener">email: help@strijhelp.org</a>
+        </div>
+        
+    </div>
+    
+
+    <!-- Кнопки действий группы -->
+    <div class="btn-actions">
+        <!-- Кнопка КОПИРОВАТЬ -->
+        <button id="copyBtn" class="btn btn-copy">
+            Копировать инструкцию в заметки
+        </button>
+
+        <!-- Кнопка НАЧАТЬ ЗАНОВО -->
+        <a href="/" class="btn btn-secondary">Начать заново</a>
+    </div>
+</div>
+
+<script>
+document.getElementById('copyBtn').addEventListener('click', function() {
+    // 1. Берём текст заголовка напрямую из тега h1 (там он уже очищен от "— bleeding")
+    const headerElement = document.querySelector('h1');
+    const cleanTitle = headerElement ? headerElement.innerText.trim() : "";
+
+    // 2. Берём текст инструкции напрямую из блока markdown-body
+    const contentElement = document.querySelector('.markdown-body');
+    const instructionText = contentElement ? contentElement.innerText.trim() : "";
+
+    // 3. Формируем финальный текст: Заголовок, затем инструкция, затем ссылка.
+    // Мы убрали ручное добавление префикса "Стрижеспасатель — ", так как он уже есть в заголовке.
+    const textToCopy = `${cleanTitle}\n\n${instructionText}\n\n${window.location.href}`;
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        const originalText = this.innerText;
+        this.innerText = "✅ Скопировано!";
+        this.style.opacity = "0.85";
+
+        setTimeout(() => {
+            this.innerText = originalText;
+            this.style.opacity = "";
+        }, 2000);
+    }).catch(err => {
+        alert("Не удалось скопировать текст автоматически.");
+    });
+});
+</script>
+
+
+
+            <footer class="site-footer">
+                <p>
+                    Сайт не предусматривает регистрацию, не хранит историю ответов, не ведет пользовательские профили и не собирает персональные данные посетителей.
+Если на отдельных страницах используются внешние сервисы, технические параметры и правила их обработки должны быть указаны отдельно.
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const toggle = document.getElementById('themeToggle');
+            const stored = localStorage.getItem('theme');
+            // Уважаем системное предпочтение, если тема не задана явно
+            let isDark;
+            if (stored !== null) {
+                isDark = stored === 'dark';
+            } else {
+                isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            }
+
+            function apply() {
+                document.documentElement.classList.toggle('dark', isDark);
+                document.body.className = isDark ? 'dark' : 'light';
+                toggle.checked = isDark;
+            }
+
+            if (stored !== null) apply();
+
+            toggle.addEventListener('change', function () {
+                isDark = toggle.checked;
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                apply();
+            });
+        })();
+    </script>
+</body>
+</html>

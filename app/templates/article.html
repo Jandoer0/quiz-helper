@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <!-- Заголовок карточки инструкции (внешний проект) -->
+    <h1 class="intro-title">Инструкция по уходу за птицей</h1>
+    <!-- Контент инструкции из Markdown -->
+    <div class="markdown-body">
+        {{ content | safe }}
+    </div>
+
+    {% if contacts %}
+    <div class="contacts-box">
+        <p>Связаться с волонтерами:</p>
+        {% for key, value in contacts.items() %}
+        <div class="contact-row">
+            <a href="{{ value }}" target="_blank" rel="noopener">{{ key }}: {{ value }}</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Кнопки действий группы -->
+    <div class="btn-actions">
+        <!-- Кнопка КОПИРОВАТЬ -->
+        <button id="copyBtn" class="btn btn-copy">
+            Копировать инструкцию в заметки
+        </button>
+
+        <!-- Кнопка НАЧАТЬ ЗАНОВО -->
+        <a href="/" class="btn btn-secondary">Начать заново</a>
+    </div>
+</div>
+
+<script>
+document.getElementById('copyBtn').addEventListener('click', function() {
+    // 1. Берём текст заголовка напрямую из тега h1 (там он уже очищен от "— bleeding")
+    const headerElement = document.querySelector('h1');
+    const cleanTitle = headerElement ? headerElement.innerText.trim() : "";
+
+    // 2. Берём текст инструкции напрямую из блока markdown-body
+    const contentElement = document.querySelector('.markdown-body');
+    const instructionText = contentElement ? contentElement.innerText.trim() : "";
+
+    // 3. Формируем финальный текст: Заголовок, затем инструкция, затем ссылка.
+    // Мы убрали ручное добавление префикса "Стрижеспасатель — ", так как он уже есть в заголовке.
+    const textToCopy = `${cleanTitle}\n\n${instructionText}\n\n${window.location.href}`;
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        const originalText = this.innerText;
+        this.innerText = "✅ Скопировано!";
+        this.style.opacity = "0.85";
+
+        setTimeout(() => {
+            this.innerText = originalText;
+            this.style.opacity = "";
+        }, 2000);
+    }).catch(err => {
+        alert("Не удалось скопировать текст автоматически.");
+    });
+});
+</script>
+
+{% endblock %}

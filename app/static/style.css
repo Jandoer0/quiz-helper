@@ -1,0 +1,580 @@
+/* ============================================================
+   Стрижеспасатель — современный дизайн
+   Переменные тем: переопределяются у html.light / html.dark
+   ============================================================ */
+
+:root {
+    /* Цвета по умолчанию (светлая тема) */
+    --bg: #f4f6f8;
+    --surface: #ffffff;
+    --surface-2: #f0f3f7;
+    --text: #1a2230;
+    --text-muted: #5c6b7b;
+    --text-inverse: #ffffff;
+    --border: #e2e8f0;
+    --border-strong: #cfd8e3;
+    --brand: #12b76a;
+    --brand-dark: #0a9153;
+    --brand-soft: #d6f2e5;
+    --accent: #2563eb;
+    --shadow: 0 10px 30px rgba(24, 67, 97, 0.08);
+    --danger: #e2483b;
+    --radius: 20px;
+    --radius-sm: 14px;
+}
+
+/* --- Светлая тема --- */
+html.light, :root {
+    --bg: #f4f6f8;
+    --surface: #ffffff;
+    --surface-2: #f0f3f7;
+    --text: #1a2230;
+    --text-muted: #5c6b7b;
+    --text-inverse: #ffffff;
+    --border: #e2e8f0;
+    --border-strong: #cfd8e3;
+    --brand: #12b76a;
+    --brand-dark: #0a9153;
+    --brand-soft: #d6f2e5;
+    --accent: #2563eb;
+    --shadow: 0 10px 30px rgba(24, 67, 97, 0.10);
+    --danger: #e2483b;
+}
+
+/* --- Тёмная тема --- */
+html.dark {
+    --bg: #0f1116;
+    --surface: #181c25;
+    --surface-2: #1f242f;
+    --text: #e8eef4;
+    --text-muted: #9aa7b6;
+    --text-inverse: #eef2f7;
+    --border: #2a3140;
+    --border-strong: #394154;
+    --brand: #2fd183;
+    --brand-dark: #27a86b;
+    --brand-soft: #163228;
+    --accent: #4f8cff;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --danger: #ff6b5a;
+}
+
+/* Тонкая коррекция контраста бренда в светлой теме */
+html.light .link-brand {
+    color: #0d8a52;
+}
+.link-brand a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 46px;
+    line-height: 46px;
+    flex-shrink: 0;
+}
+html.light a.btn-primary {
+    background-color: #12b76a;
+    color: #062115;
+}
+html.light a.btn-primary:active {
+    background-color: #0a9153;
+}
+
+/* ============================================================
+   Общий сброс
+   ============================================================ */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PT Sans", sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 24px 16px 48px;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ============================================================
+   Шапка и навигация
+   ============================================================ */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 20px;
+    margin-bottom: 28px;
+    background: color-mix(in srgb, var(--surface) 85%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+}
+
+/* Маркер бренда занимает свободное пространство между логотипом и переключателем,
+   так что короткая надпись визуально центрирована. */
+.link-brand {
+    flex: 1 1 auto;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    transition: color 0.2s ease;
+    height: 46px;
+    line-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.link-brand:hover {
+    color: var(--brand);
+}
+/* Заголовок бренда крупнее и по центру по вертикали (высо​та строки 46px). */
+.link-brand span {
+    display: inline-block;
+    font-size: 27px;
+    font-weight: 700;
+    line-height: 34px;
+    letter-spacing: 0;
+    transition: font-size 0.2s ease;
+}
+
+.swift-logo {
+    height: 46px;
+    width: 46px;
+    object-fit: contain;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease;
+}
+
+.theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 32px;
+    flex-shrink: 0;
+}
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+.toggle-track {
+    position: absolute;
+    inset: 0;
+    background: var(--surface-2);
+    border: 1.5px solid var(--border-strong);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.25s ease, border-color 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 7px;
+    font-size: 15px;
+}
+.toggle-track span {
+    opacity: 0.55;
+    line-height: 1;
+}
+html.dark .toggle-track {
+    background: #20263366;
+    border-color: #3a4456;
+}
+.theme-switch input:checked + .toggle-track {
+    background: var(--brand);
+    border-color: var(--brand-dark);
+}
+.theme-switch input:checked + .toggle-track span:first-child {
+    opacity: 0.55;
+}
+.theme-switch input:checked + .toggle-track span:last-child {
+    opacity: 1;
+}
+
+/* ============================================================
+   Основной блок и карточка
+   ============================================================ */
+.content-wrap {
+    min-width: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Заголовок-карточка инструкции (первый заголовок карточки) */
+.intro-title {
+    display: block;
+    text-align: center;
+    margin: 2px 0 22px;
+    padding: 8px 18px;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+    color: var(--text);
+    background: var(--surface-2);
+    box-shadow: inset 0 1px 0 0 var(--border-strong);
+    transition: color 0.2s ease, background-color 0.25s ease, border-color 0.25s ease;
+}
+.card h1.intro-title:hover {
+    color: var(--brand);
+    border-color: var(--brand);
+}
+/* Для «старых» вкладок intro-box (позволяет гибко стилизовать вложенные ярлыки). */
+.intro-box {
+    margin: 0 0 0 0;
+}
+.intro-box .intro-title {
+    display: inline-block;
+}
+html.dark .intro-title {
+    background: #202633;
+    border-color: #394154;
+}
+
+.card {
+    background: var(--surface);
+    padding: 36px 30px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    animation: rise 0.35s ease;
+}
+
+@keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.site-footer {
+    max-width: 600px;
+    margin: 38px auto 0;
+    padding: 22px 22px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+}
+.site-footer p {
+    color: var(--text-muted);
+    font-size: 13.5px;
+    line-height: 1.65;
+    text-align: justify;
+}
+
+/* ============================================================
+   Типографика
+   ============================================================ */
+h1 {
+    color: var(--text);
+    font-size: 27px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    line-height: 1.25;
+}
+
+.card p {
+    color: var(--text);
+    font-size: 20px;
+    margin-bottom: 28px;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+.article-subtitle {
+    color: var(--text-muted);
+    font-size: 16px;
+    margin-bottom: 26px;
+}
+
+/* ============================================================
+   Кнопки
+   ============================================================ */
+a.btn {
+    display: block;
+    width: 100%;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: transform 0.12s ease, filter 0.12s ease, background 0.12s ease, color 0.12s ease;
+    box-shadow: var(--shadow);
+}
+a.btn:active {
+    transform: translateY(2px);
+}
+
+/* Основная (зелёная) кнопка */
+a.btn-primary,
+a.btn:not(.btn-secondary):not(.btn-copy) {
+    background: var(--brand);
+    color: #062115;
+}
+a.btn-primary:active,
+a.btn:not(.btn-secondary):not(.btn-copy):active {
+    background: var(--brand-dark);
+    filter: brightness(0.96);
+}
+
+/* Вторичная (контурная) кнопка */
+a.btn-secondary {
+    display: block;
+    width: 100%;
+    padding: 16px 22px;
+    margin-top: 6px;
+    background: transparent;
+    border: 1.5px solid var(--border-strong);
+    color: var(--text);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 600;
+}
+a.btn-secondary:hover {
+    border-color: var(--brand);
+    color: var(--brand);
+}
+
+/* Кнопка копирования */
+a.btn-copy {
+    display: block;
+    width: 100%;
+    padding: 18px 20px;
+    margin-top: 4px;
+    text-align: center;
+    text-decoration: none;
+    background: var(--accent);
+    color: #ffffff;
+    border-radius: var(--radius-sm);
+    font-size: 18px;
+    font-weight: 600;
+}
+a.btn-copy:active {
+    filter: brightness(0.92);
+}
+
+/* ============================================================
+   Кнопки действий (копировать / начать заново)
+   ============================================================ */
+.btn-actions {
+    width: 100%;
+}
+.btn-actions .btn {
+    margin-bottom: 0;
+}
+@media (max-width: 420px) {
+    .btn-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        width: auto !important;
+    }
+    .btn-actions .btn {
+        display: inline-block !important;
+        margin-left: auto;
+        margin-bottom: 0;
+    }
+    /* Отступ между двумя кнопками: только первая получает margin-bottom */
+    .btn-actions .btn:first-child {
+        margin-bottom: 12px;
+    }
+    .btn-actions .btn:last-child {
+        margin-top: 0;
+    }
+}
+
+/* ============================================================
+   Блоки инлайн-контента
+   ============================================================ */
+.contacts-box {
+    margin-top: 26px;
+    padding: 18px 20px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 30px;
+}
+.contacts-box p {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.contacts-box .contact-row {
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+.contacts-box a {
+    color: var(--brand);
+    text-decoration: none;
+}
+.contacts-box a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================
+   Markdown-контент инструкций
+   ============================================================ */
+.markdown-body {
+    color: var(--text);
+    font-size: 17px;
+}
+.markdown-body h1 {
+    margin: 0 0 8px;
+    font-weight: 800;
+    font-size: 20px;
+    line-height: 1.25;
+}
+.markdown-body p {
+    margin-bottom: 16px;
+}
+.markdown-body ul,
+.markdown-body ol {
+    padding-left: 26px;
+    margin-bottom: 18px;
+}
+.markdown-body li {
+    margin-bottom: 8px;
+}
+.markdown-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    display: block;
+    overflow-x: auto;
+}
+.markdown-body th,
+.markdown-body td {
+    border: 1px solid var(--border);
+    padding: 11px 13px;
+    text-align: left;
+}
+.markdown-body thead th {
+    background: var(--surface-2);
+}
+.markdown-body code {
+    background: var(--surface-2);
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+.markdown-body pre {
+    background: var(--surface-2);
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    overflow-x: auto;
+}
+.markdown-body pre code {
+    background: none;
+    padding: 0;
+}
+
+/* Предупреждающие фразы */
+.markdown-body .danger {
+    color: var(--danger) !important;
+    font-weight: 700;
+}
+
+/* Баннер предупреждения о проверке целостности анкеты
+   (показывается на странице опроса, если quiz_engine не вышел в продуктивную фазу). */
+.quiz-validate-warning {
+    max-width: 600px;
+    margin: 0 auto 16px;
+    padding: 14px 18px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--danger);
+    background: color-mix(in srgb, var(--danger) 10%, transparent);
+    color: var(--danger);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+html.dark .quiz-validate-warning {
+    background: #3a141255;
+    border-color: #5c2220;
+}
+
+/* ============================================================
+   Футер «О проекте» в карточке
+   ============================================================ */
+.about-divider {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 36px 0;
+}
+
+/* ============================================================
+   Адаптивность
+   ============================================================ */
+/* --- Адаптивная шапка и логотип (мобайл / узкие экраны) --- */
+@media (max-width: 420px) {
+    .card { padding: 28px 22px; }
+    h1 { font-size: 24px; }
+    .card p { font-size: 19px; }
+    a.btn { font-size: 17px; padding: 18px; }
+    /* Логотип-эмблем схлопывается под высоту строки — без потери высоты бренда. */
+    .swift-logo {
+        height: 26px;
+        width: 26px;
+        margin: 0 20px 0 8px;
+    }
+    /* На узких экранах длинный бренд не всегда влезает: делаем его вторичным,
+       «прижимаем» переключатель темы вправо, чтобы логотип+бренд не выталкивали
+       кнопку за пределы шапки. */
+    .theme-switch {
+        flex-shrink: 0;
+        margin-left: auto;
+        flex-grow: 0;
+    }
+    .link-brand {
+        flex-grow: 0;
+        flex-shrink: 0;
+        max-width: 150px;
+    }
+    .link-brand span {
+        font-size: 17px;
+        line-height: 26px;
+        letter-spacing: 0;
+        max-width: 150px;
+    }
+}
+@media (max-width: 360px) {
+    .link-brand { font-size: 14px; }
+    .link-brand span { font-size: 13px; letter-spacing: 0; }
+}
+
+/* Дозволение масштабирования (доступность) */
+@media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

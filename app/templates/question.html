@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h1>{{ title }}</h1>
+    <p>{{ question.text }}</p>
+    
+    {% for answer in question.answers %}
+        {% if answer.next %}
+            <a href="{{ url_for('question_page', q_id=answer.next) }}" class="btn">
+                {{ answer.text }}
+            </a>
+        {% elif answer.article %}
+            <a href="{{ url_for('article_page', article_id=answer.article) }}" class="btn">
+                {{ answer.text }}
+            </a>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}
