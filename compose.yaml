@@ -1,43 +1,17 @@
-version: '3.8'
-
+# Простой самодостаточный запуск сайта «Стрижеспасатель».
+# Не зависит от caddy/nginx и внешней сети services-net.
+# Сайт публикуется на 0.0.0.0:8001 (внутри контейнера — 8000).
+#
+# Запуск:  podman compose up -d --build
+# Останов: podman compose down
 services:
   app:
     build: .
     container_name: swift_help_app
     restart: always
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
     ports:
-      - "8001:8000"
+      - "8080:8000"
     volumes:
       - ./data:/app/data
       - ./app/templates:/app/app/templates
       - ./app/static:/app/static
-    networks:
-      - services-net
-
-  # Обратный прокси Nginx для режима «горячей» верстки:
-  #  - /       -> проксировать в приложение FastAPI
-  #  - /static/* -> отдавать прямо из привязанного каталога .build с заголовком
-  #    «no-cache». Благодаря этому любые правки style.css / изображений
-  #    немедленно отображаются в браузере без пересборки контейнера.
-  nginx:
-    image: nginx:stable-alpine
-    container_name: swift_help_nginx
-    restart: unless-stopped
-    ports:
-      - "8000:80"
-    depends_on:
-      - app
-    volumes:
-      - ./.build/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./app/static:/etc/nginx/html/build:ro
-    networks:
-      - services-net
-
-networks:
-  services-net:
-    external: true

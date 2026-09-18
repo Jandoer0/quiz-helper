@@ -3,11 +3,21 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import uvicorn
+import logging
+from pathlib import Path
+
+# Настройка логирования (используется в _safe_validate ниже)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Импорт внутренних модулей проекта
 from .loader import DataLoader
 from .renderer import ContentRenderer
 from .quiz_engine import QuizEngine
+
+# Абсолютный путь к каталогу app/ — чтобы шаблоны и статика находились
+# независимо от рабочей директории, из которой запущено приложение.
+APP_DIR = Path(__file__).resolve().parent
 
 # Флаг для безопасного повторного вызова валидации.
 # Он полезен в тестах: если импорты не завершены — блок проверки пропускается,
@@ -50,12 +60,11 @@ renderer = ContentRenderer()
 # 3. Инициализация приложения FastAPI
 app = FastAPI(title=settings.get("site_name", "Стрижеспасатель"))
 
-# 4. Настройка шаблонов и статики
-templates = Jinja2Templates(directory="app/templates")
+# 4. Настройка шаблонов и статики (абсолютные пути — надёжнее относительных)
+templates = Jinja2Templates(directory=str(APP_DIR / "templates"))
 
 # Монтируем статичные файлы (CSS, изображения)
-# Путь "app/static" верен для работы внутри контейнера при текущей структуре
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/static", StaticFiles(directory=str(APP_DIR / "static")), name="static")
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
