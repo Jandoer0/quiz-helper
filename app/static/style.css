@@ -127,10 +127,10 @@ body {
     box-shadow: var(--shadow);
 }
 
-/* Маркер бренда занимает свободное пространство между логотипом и переключателем,
-   так что короткая надпись визуально центрирована. */
+/* Логотип-ссылка занимает только свой размер и прижат влево;
+   надпись вынесена в отдельный .site-title и центрируется по середине шапки. */
 .link-brand {
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     font-size: 22px;
     font-weight: 800;
     color: var(--text);
@@ -146,13 +146,18 @@ body {
 .link-brand:hover {
     color: var(--brand);
 }
-/* Заголовок бренда крупнее и по центру по вертикали (высо​та строки 46px). */
-.link-brand span {
-    display: inline-block;
+/* Заголовок сайта центрирован по середине шапки между логотипом и переключателем. */
+.site-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 27px;
     font-weight: 700;
     line-height: 34px;
     letter-spacing: 0;
+    color: var(--text);
+    white-space: nowrap;
     transition: font-size 0.2s ease;
 }
 
