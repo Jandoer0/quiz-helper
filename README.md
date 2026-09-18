@@ -9,31 +9,18 @@
 ## Технологии
 - Python 3.13 + FastAPI (uvicorn)
 - Jinja2-шаблоны, инструкции в Markdown
-- Контейнеризация через Podman (`Containerfile`)
 
 ## Структура
 - `app/` — FastAPI-приложение (`main`, `loader`, `quiz_engine`, `renderer`) + шаблоны и статика
 - `data/` — настройки (`settings.yaml`), дерево вопросов (`questions.json`), статьи (`articles/*.md`)
-- `Containerfile` — сборка образа приложения
-- `compose.yaml` — запуск через `podman compose`
-- `deploy.sh` — деплой на удалённый сервер (rsync исходников + установка systemd-сервиса)
-- `backup_project.sh` — локальный бэкап исходников в архив
+- `requirements.txt` — зависимости Python
 
-## Локальный запуск (podman compose)
+## Запуск
 ```bash
-podman compose up -d --build
-# Сайт доступен на http://localhost:8080
-# (внутри контейнера — 8000; хост-порт можно изменить в compose.yaml)
+pip install -r requirements.txt
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+# Откройте http://localhost:8000
 ```
-
-## Деплой на сервер
-```bash
-DEPLOY_HOST=server.example.com ./deploy.sh
-```
-Скрипт копирует актуальные исходники на сервер, собирает образ и устанавливает
-systemd-сервис, который запускается вместе с сервером. Параметры (пользователь,
-порт SSH, каталог) задаются переменными окружения `DEPLOY_USER`, `DEPLOY_PORT`,
-`DEPLOY_DIR`, `SSH_KEY`.
 
 ## Лицензия
 MIT — см. файл `LICENSE`.

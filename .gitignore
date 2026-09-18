@@ -28,3 +28,7 @@ Screenshot*.png
 *.swp
 PROMT.md
 scrin1.jpg
+deploy.sh
+compose.yaml
+Containerfile
+backup_project.sh
