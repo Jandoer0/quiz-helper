@@ -318,7 +318,7 @@ h1 {
 /* ============================================================
    Кнопки
    ============================================================ */
-a.btn {
+a.btn, button.btn {
     display: block;
     width: 100%;
     padding: 20px 22px;
@@ -334,7 +334,7 @@ a.btn {
     transition: transform 0.12s ease, filter 0.12s ease, background 0.12s ease, color 0.12s ease;
     box-shadow: var(--shadow);
 }
-a.btn:active {
+a.btn:active, button.btn:active {
     transform: translateY(2px);
 }
 
@@ -370,7 +370,7 @@ a.btn-secondary:hover {
 }
 
 /* Кнопка копирования */
-a.btn-copy {
+a.btn-copy, button.btn-copy {
     display: block;
     width: 100%;
     padding: 18px 20px;
@@ -383,7 +383,7 @@ a.btn-copy {
     font-size: 18px;
     font-weight: 600;
 }
-a.btn-copy:active {
+a.btn-copy:active, button.btn-copy:active {
     filter: brightness(0.92);
 }
 
@@ -391,6 +391,9 @@ a.btn-copy:active {
    Кнопки действий (копировать / начать заново)
    ============================================================ */
 .btn-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     width: 100%;
 }
 .btn-actions .btn {
@@ -398,22 +401,13 @@ a.btn-copy:active {
 }
 @media (max-width: 420px) {
     .btn-actions {
-        display: flex;
-        flex-direction: column;
         align-items: flex-end;
-        width: auto !important;
+        width: auto;
     }
     .btn-actions .btn {
-        display: inline-block !important;
+        display: inline-block;
+        width: auto;
         margin-left: auto;
-        margin-bottom: 0;
-    }
-    /* Отступ между двумя кнопками: только первая получает margin-bottom */
-    .btn-actions .btn:first-child {
-        margin-bottom: 12px;
-    }
-    .btn-actions .btn:last-child {
-        margin-top: 0;
     }
 }
 
@@ -547,7 +541,7 @@ html.dark .quiz-validate-warning {
     .card { padding: 28px 22px; }
     h1 { font-size: 24px; }
     .card p { font-size: 19px; }
-    a.btn { font-size: 17px; padding: 18px; }
+    a.btn, button.btn { font-size: 17px; padding: 18px; }
     /* Логотип-эмблем схлопывается под высоту строки — без потери высоты бренда. */
     .swift-logo {
         height: 26px;
