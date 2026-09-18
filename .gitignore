@@ -32,3 +32,5 @@ deploy.sh
 compose.yaml
 Containerfile
 backup_project.sh
+_ast_check.py
+_verify_app.py
