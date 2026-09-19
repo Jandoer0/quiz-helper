@@ -16,7 +16,6 @@
     --brand: #12b76a;
     --brand-dark: #0a9153;
     --brand-soft: #d6f2e5;
-    --accent: #2563eb;
     --shadow: 0 10px 30px rgba(24, 67, 97, 0.08);
     --danger: #e2483b;
     --radius: 20px;
@@ -36,7 +35,6 @@ html.light, :root {
     --brand: #12b76a;
     --brand-dark: #0a9153;
     --brand-soft: #d6f2e5;
-    --accent: #2563eb;
     --shadow: 0 10px 30px rgba(24, 67, 97, 0.10);
     --danger: #e2483b;
 }
@@ -54,7 +52,6 @@ html.dark {
     --brand: #2fd183;
     --brand-dark: #27a86b;
     --brand-soft: #163228;
-    --accent: #4f8cff;
     --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     --danger: #ff6b5a;
 }
@@ -62,14 +59,6 @@ html.dark {
 /* Тонкая коррекция контраста бренда в светлой теме */
 html.light .link-brand {
     color: #0d8a52;
-}
-.link-brand a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    height: 46px;
-    line-height: 46px;
-    flex-shrink: 0;
 }
 html.light a.btn-primary {
     background-color: #12b76a;
