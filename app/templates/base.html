@@ -19,8 +19,7 @@
         <label class="theme-switch" title="Сменить тему">
           <input type="checkbox" id="themeToggle" aria-label="Тема">
           <div class="toggle-track">
-            <span>☀️</span>
-            <span>🌙</span>
+            <span class="toggle-thumb" id="themeThumb">☀️</span>
           </div>
         </label>
     </header>
@@ -47,6 +46,7 @@
     <script>
         (function () {
             const toggle = document.getElementById('themeToggle');
+            const thumb = document.getElementById('themeThumb');
             const stored = localStorage.getItem('theme');
             // Уважаем системное предпочтение, если тема не задана явно
             let isDark;
@@ -60,6 +60,7 @@
                 document.documentElement.classList.toggle('dark', isDark);
                 document.body.className = isDark ? 'dark' : 'light';
                 toggle.checked = isDark;
+                thumb.textContent = isDark ? '🌙' : '☀️';
             }
 
             if (stored !== null) apply();

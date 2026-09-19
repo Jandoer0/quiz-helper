@@ -178,30 +178,34 @@ body {
     border: 1.5px solid var(--border-strong);
     border-radius: 999px;
     cursor: pointer;
+    overflow: hidden;
     transition: background 0.25s ease, border-color 0.25s ease;
+}
+/* «Планета» (солнце/луна) — одна на весь переключатель,
+   скользит по небосклону при смене темы. */
+.toggle-thumb {
+    position: absolute;
+    top: 50%;
+    left: 3px;
+    width: 24px;
+    height: 24px;
+    transform: translateY(-50%);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 7px;
-    font-size: 15px;
-}
-.toggle-track span {
-    opacity: 0.55;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--brand-soft);
+    color: var(--brand);
+    font-size: 14px;
     line-height: 1;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                background 0.25s ease, color 0.25s ease;
 }
-html.dark .toggle-track {
-    background: #20263366;
-    border-color: #3a4456;
-}
-.theme-switch input:checked + .toggle-track {
-    background: var(--surface-2);
-    border-color: var(--border-strong);
-}
-.theme-switch input:checked + .toggle-track span:first-child {
-    opacity: 0.55;
-}
-.theme-switch input:checked + .toggle-track span:last-child {
-    opacity: 1;
+/* Тёмная тема: планета уезжает вправо и становится луной */
+.theme-switch input:checked + .toggle-track .toggle-thumb {
+    left: 33px;
+    background: #2b3340;
+    color: var(--text-inverse);
 }
 
 /* ============================================================
