@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Стрижеспасатель</title>
+    <title>{{ site_name }}</title>
     <!-- Тема проставляется ДО отрисовки: системное предпочтение, если выбор не сохранён -->
     <script>
         (function () {
@@ -17,17 +17,17 @@
         })();
     </script>
     <!-- Используем прямой путь вместо url_for для исключения ошибок маршрутизации -->
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/img/swift.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/img/swift.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/{{ logo }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/{{ logo }}">
     <link rel="stylesheet" href="/static/style.css?v=4">
 </head>
 <body>
     <!-- Шапка с переключателем тем -->
     <header class="site-header">
-        <a href="/" class="link-brand" aria-label="Стрижеспасатель">
-            <img src="/static/img/swift.png" alt="Стриж" class="swift-logo">
+        <a href="/" class="link-brand" aria-label="{{ site_name }}">
+            <img src="/static/{{ logo }}" alt="{{ site_name }}" class="site-logo">
         </a>
-        <h1 class="site-title">Стрижеспасатель</h1>
+        <h1 class="site-title">{{ site_name }}</h1>
         <label class="theme-switch" title="Сменить тему">
           <input type="checkbox" id="themeToggle" aria-label="Тема">
           <div class="toggle-track">

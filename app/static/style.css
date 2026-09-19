@@ -1,5 +1,5 @@
 /* ============================================================
-   Стрижеспасатель — современный дизайн
+   Универсальный конструктор опросников — современный дизайн
    Переменные тем: переопределяются у html.light / html.dark
    ============================================================ */
 
@@ -149,7 +149,7 @@ body {
     transition: font-size 0.2s ease;
 }
 
-.swift-logo {
+.site-logo {
     height: 46px;
     width: 46px;
     object-fit: contain;
@@ -518,7 +518,7 @@ html.dark .quiz-validate-warning {
     .card p { font-size: 19px; }
     a.btn, button.btn { font-size: 17px; padding: 18px; }
     /* Логотип-эмблем схлопывается под высоту строки — без потери высоты бренда. */
-    .swift-logo {
+    .site-logo {
         height: 26px;
         width: 26px;
         margin: 0 20px 0 8px;

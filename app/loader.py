@@ -45,7 +45,7 @@ class DataLoader:
                 return config if config else {}
         except FileNotFoundError:
             logger.error(f"Settings file not found at {path}")
-            return {"site_name": "Стрижеспасатель", "footer": ""}
+            return {"site_name": "Опросник", "logo": "img/swift.png", "footer": ""}
         except Exception as e:
             logger.error(f"Unexpected error loading settings: {e}")
             return {}
@@ -87,6 +87,23 @@ class DataLoader:
                 return f.read()
         except Exception as e:
             logger.error(f"Error reading article content for {article_id}: {e}")
+            return None
+
+    def load_about(self) -> Optional[str]:
+        """
+        Загружает текст страницы «О проекте» из data/about.md (опционально).
+
+        :return: Строка с Markdown-контентом или None, если файл не найден.
+        """
+        path = self.data_dir / "about.md"
+        if not path.exists():
+            logger.info(f"About file not found: {path}")
+            return None
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return f.read()
+        except Exception as e:
+            logger.error(f"Error reading about content: {e}")
             return None
 
 # Пример использования в других модулях:

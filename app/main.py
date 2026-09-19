@@ -50,21 +50,29 @@ settings = data_loader.load_settings()       # Загрузка из settings.ya
 quiz_data = data_loader.load_questions()     # Загрузка из questions.json
 
 # 1.1. Проверка целостности дерева решений с использованием QuizEngine.
-# Логика: предупреждения не смертельны - приложение работает дальше,
-# но в логах остается заметный след для быстрой диагностики.
 _validator = _safe_validate(quiz_data)
 
 # 2. Инициализация движка и рендерера
 renderer = ContentRenderer()
 
 # 3. Инициализация приложения FastAPI
-app = FastAPI(title=settings.get("site_name", "Стрижеспасатель"))
+app = FastAPI(title=settings.get("site_name", "Опросник"))
 
 # 4. Настройка шаблонов и статики (абсолютные пути — надёжнее относительных)
 templates = Jinja2Templates(directory=str(APP_DIR / "templates"))
 
 # Монтируем статичные файлы (CSS, изображения)
 app.mount("/static", StaticFiles(directory=str(APP_DIR / "static")), name="static")
+
+
+def _common(request: Request) -> dict:
+    """Общий набор переменных шаблона: название сайта и логотип из settings.yaml."""
+    return {
+        "request": request,
+        "site_name": settings.get("site_name", "Опросник"),
+        "logo": settings.get("logo", "img/swift.png"),
+    }
+
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
@@ -75,7 +83,7 @@ async def index(request: Request):
 
     start_node = settings.get("start_node", "q1")
     question = quiz_data.get(start_node)
-    
+
     if not question:
         # Если начальный узел не найден, берем первый доступный в объекте questions
         questions = quiz_data.get("questions", {})
@@ -85,34 +93,30 @@ async def index(request: Request):
         else:
             raise HTTPException(status_code=404, detail="Анкета пуста.")
 
-    template_args = {
-        "request": request,
-        "question": question,
-        "step": 1,
-        "title": settings.get("site_name", "Стрижеспасатель"),
-    }
+    template_args = _common(request)
+    template_args["question"] = question
+    template_args["step"] = 1
     if not _validate_flag:
         template_args["validate_flag"] = False
-    
+
     return templates.TemplateResponse("index.html", template_args)
+
 
 @app.get("/question/{q_id}", response_class=HTMLResponse)
 async def question_page(request: Request, q_id: str):
     """Страница конкретного вопроса из JSON анкеты."""
     questions = quiz_data.get("questions", {})
     question = questions.get(q_id)
-    
+
     if not question:
         raise HTTPException(status_code=404, detail="Вопрос не найден.")
 
     # Указываем в шапке статус прохождения валидации quiz_engine.
-    validate_flag = _validation_done
-    return templates.TemplateResponse("question.html", {
-        "request": request,
-        "question": question,
-        "title": settings.get("site_name", "Стрижеспасатель"),
-        "validate_flag": validate_flag
-    })
+    template_args = _common(request)
+    template_args["question"] = question
+    template_args["validate_flag"] = _validation_done
+    return templates.TemplateResponse("question.html", template_args)
+
 
 @app.get("/article/{article_id}", response_class=HTMLResponse)
 async def article_page(request: Request, article_id: str):
@@ -121,29 +125,32 @@ async def article_page(request: Request, article_id: str):
     if not content:
         raise HTTPException(status_code=404, detail="Инструкция не найдена.")
 
-    # Собираем все нужные данные из конфига
-    html_content = renderer.render_markdown(content)
-    contacts = settings.get("contacts")
-    
-    validate_flag = _validation_done
-    return templates.TemplateResponse("article.html", {
-        "request": request,
-        "content": html_content,
-        "contacts": contacts,
-        "article_title": article_id,
-        "title": article_id,
-        "validate_flag": validate_flag
+    # Заголовок инструкции: индивидуальный (article_titles) либо общий (instruction_title)
+    article_titles = settings.get("article_titles", {}) or {}
+    instruction_title = article_titles.get(article_id) or settings.get("instruction_title", "Инструкция")
+
+    template_args = _common(request)
+    template_args.update({
+        "content": renderer.render_markdown(content),
+        "contacts": settings.get("contacts"),
+        "instruction_title": instruction_title,
+        "validate_flag": _validation_done,
     })
+    return templates.TemplateResponse("article.html", template_args)
+
 
 @app.get("/about", response_class=HTMLResponse)
 async def about_page(request: Request):
-    """Страница 'О проекте' с юридической информацией и описанием целей."""
-    # На статусе проверки целостности анкеты здесь мы уже ничего не меняем,
-    # чтобы не задевать другие ветки кода (они вне зоны нашей правки).
-    return templates.TemplateResponse("about.html", {
-        "request": request,
-        "title": "О проекте — Стрижеспасатель"
+    """Страница «О проекте» — текст из data/about.md (либо about_text из settings.yaml)."""
+    about_md = data_loader.load_about()
+    about_html = renderer.render_markdown(about_md) if about_md else ""
+
+    template_args = _common(request)
+    template_args.update({
+        "about_content": about_html,
     })
+    return templates.TemplateResponse("about.html", template_args)
+
 
 if __name__ == "__main__":
     # Запуск сервера для локальной разработки (опционально)
