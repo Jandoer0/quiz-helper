@@ -4,12 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Стрижеспасатель</title>
+    <!-- Тема проставляется ДО отрисовки: системное предпочтение, если выбор не сохранён -->
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('theme');
+                var isDark = stored !== null
+                    ? stored === 'dark'
+                    : window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.classList.toggle('dark', isDark);
+            } catch (e) {}
+        })();
+    </script>
     <!-- Используем прямой путь вместо url_for для исключения ошибок маршрутизации -->
         <link rel="icon" type="image/png" sizes="32x32" href="/static/img/swift.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/img/swift.png">
     <link rel="stylesheet" href="/static/style.css?v=4">
 </head>
-<body class="dark">
+<body>
     <!-- Шапка с переключателем тем -->
     <header class="site-header">
         <a href="/" class="link-brand" aria-label="Стрижеспасатель">
@@ -47,27 +59,22 @@
         (function () {
             const toggle = document.getElementById('themeToggle');
             const thumb = document.getElementById('themeThumb');
-            const stored = localStorage.getItem('theme');
-            // Уважаем системное предпочтение, если тема не задана явно
-            let isDark;
-            if (stored !== null) {
-                isDark = stored === 'dark';
-            } else {
-                isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            }
+            // Тема уже выставлена в <head> с учётом системного предпочтения / сохранённого выбора
+            let isDark = document.documentElement.classList.contains('dark');
 
             function apply() {
                 document.documentElement.classList.toggle('dark', isDark);
-                document.body.className = isDark ? 'dark' : 'light';
+                document.body.classList.toggle('dark', isDark);
+                document.body.classList.toggle('light', !isDark);
                 toggle.checked = isDark;
                 thumb.textContent = isDark ? '🌙' : '☀️';
             }
 
-            if (stored !== null) apply();
+            apply();
 
             toggle.addEventListener('change', function () {
                 isDark = toggle.checked;
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (e) {}
                 apply();
             });
         })();
