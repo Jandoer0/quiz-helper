@@ -369,22 +369,15 @@ a.btn-secondary:hover {
     color: var(--brand);
 }
 
-/* Кнопка копирования */
+/* Кнопка копирования — оформлена как основная (зелёная) кнопка опроса */
 a.btn-copy, button.btn-copy {
-    display: block;
-    width: 100%;
-    padding: 18px 20px;
-    margin-top: 4px;
-    text-align: center;
-    text-decoration: none;
-    background: var(--accent);
-    color: #ffffff;
-    border-radius: var(--radius-sm);
-    font-size: 18px;
-    font-weight: 600;
+    background: var(--brand);
+    color: #062115;
+    border: 1.5px solid transparent;
 }
 a.btn-copy:active, button.btn-copy:active {
-    filter: brightness(0.92);
+    background: var(--brand-dark);
+    filter: brightness(0.96);
 }
 
 /* ============================================================
@@ -398,17 +391,6 @@ a.btn-copy:active, button.btn-copy:active {
 }
 .btn-actions .btn {
     margin-bottom: 0;
-}
-@media (max-width: 420px) {
-    .btn-actions {
-        align-items: flex-end;
-        width: auto;
-    }
-    .btn-actions .btn {
-        display: inline-block;
-        width: auto;
-        margin-left: auto;
-    }
 }
 
 /* ============================================================
